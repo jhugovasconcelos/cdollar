@@ -1,9 +1,5 @@
 package dev.jhugo.cdollar.repository;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public record DollarRecord(String context, ArrayList<String> value) {
-    public ArrayList<String> getValue(){
-        return this.value;
-    }
-}
+public record DollarRecord(String context, List<ValueRecord> value) {}

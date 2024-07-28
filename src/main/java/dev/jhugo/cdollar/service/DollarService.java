@@ -1,42 +1,50 @@
 package dev.jhugo.cdollar.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
+import java.util.List;
 
 import dev.jhugo.cdollar.repository.DollarRecord;
+
 
 
 @Service
 public class DollarService {
     
-    // TODO: Create Beans for RestTemplate and Date in separate Configurations Class.
-    RestTemplate dollarTemplate = new RestTemplate();
+    private final RestClient restClient;
 
-
-    private Date today = new Date();
-    private SimpleDateFormat todayFormat = new SimpleDateFormat("MM-dd-yyyy");
-    private String todayString = todayFormat.format(today);
+    // Constructor injection for the restClient
+    public DollarService(){
+        restClient = RestClient.builder()
+        .baseUrl("https://olinda.bcb.gov.br")
+        .build();
+    }
     
-    
-    String url = String.format(
-            "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='%s'&$top=1&$format=json&$select=cotacaoVenda", todayString);
+    public DollarRecord getDollarPrice() {      
+        // Creating Date
+        LocalDate today = LocalDate.now(); 
+        
+        // Checking if it's weekennd
+        if(today.getDayOfWeek().toString() == "SATURDAY"){
+            today = today.minusDays(1);
+        } else if(today.getDayOfWeek().toString() == "SUNDAY"){
+            today = today.minusDays(2);
+        }
+        
+        // Formatting date to fit into the URL
+        DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy"); 
+        String todayString = todayFormatter.format(today);
+        String url = String.format(
+            "/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='%s'&$top=1&$format=json&$select=cotacaoVenda", todayString);
 
-    public String getDollarPrice() {
-        RestClient restClient = RestClient.create();
-        DollarRecord dollarRecord = restClient.get()
+        // Using the Restclient to fetch data from the Bacen API
+        return restClient.get()
         .uri(url)
         .retrieve()
         .body(DollarRecord.class);
-                
-        // TODO: Solve this - the optional should guarantee the value won't be null.
-        Optional<String> dollarPriceOptional = Optional.of(dollarRecord.getValue().toString());
-        
     }
 }
