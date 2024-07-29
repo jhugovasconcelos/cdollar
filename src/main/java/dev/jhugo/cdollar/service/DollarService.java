@@ -1,7 +1,7 @@
 package dev.jhugo.cdollar.service;
 
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -24,10 +24,12 @@ public class DollarService {
     
     public DollarRecord getDollarPrice() {      
         // Creating Date        
-        LocalDate today = LocalDate.now();
+        LocalDateTime today = LocalDateTime.now();
 
         // Changing the date to the day before, or 2 days before if it's sunday
-        today = today.minusDays(1);
+        if(today.getHour() <= 14){
+            today = today.minusDays(1);
+        }
         if(today.getDayOfWeek().toString() == "SUNDAY"){
             today = today.minusDays(2);
         }
