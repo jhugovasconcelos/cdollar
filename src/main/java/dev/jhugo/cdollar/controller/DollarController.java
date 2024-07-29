@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.util.List;
 
 import dev.jhugo.cdollar.repository.DollarRecord;
 import dev.jhugo.cdollar.service.DollarService;
-import dev.jhugo.cdollar.service.Rates;
+import dev.jhugo.cdollar.service.impl.NubankRates;
 
 @Controller
 public class DollarController {
@@ -16,21 +15,26 @@ public class DollarController {
     DollarService dollarService;
 
     @Autowired
-    Rates rates;
-    
+    NubankRates nubankRates;
+
     @GetMapping("/")
-    public ResponseEntity<String> welcome(){
+    public ResponseEntity<String> welcome() {
         return ResponseEntity.ok("Welcome to the API!");
     }
 
     @GetMapping("/price")
-    public ResponseEntity<DollarRecord> getDollarPrice(){
-       return ResponseEntity.ok(dollarService.getDollarPrice());
+    public ResponseEntity<DollarRecord> getDollarPrice() {
+        return ResponseEntity.ok(dollarService.getDollarPrice());
+    }
+
+    @GetMapping("/spread/nubank")
+    public ResponseEntity<Double> getSpreadNubank() {
+        return ResponseEntity.ok(nubankRates.getSpread());
     }
 
     @GetMapping("/rates/nubank")
-    public ResponseEntity<Double> getRateNubank(){
-        return ResponseEntity.ok(rates.ratesNubank());
+    public ResponseEntity<Double> getRateNubank() {
+        return ResponseEntity.ok(nubankRates.getFinalRate());
     }
-    
+
 }

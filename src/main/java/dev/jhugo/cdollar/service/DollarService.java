@@ -3,10 +3,8 @@ package dev.jhugo.cdollar.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import java.util.List;
 
 import dev.jhugo.cdollar.repository.DollarRecord;
 
