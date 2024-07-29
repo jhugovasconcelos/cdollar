@@ -23,22 +23,22 @@ public class DollarService {
     }
     
     public DollarRecord getDollarPrice() {      
-        // Creating Date
-        LocalDate today = LocalDate.now(); 
-        
-        // Checking if it's weekennd
-        if(today.getDayOfWeek().toString() == "SATURDAY"){
-            today = today.minusDays(1);
-        } else if(today.getDayOfWeek().toString() == "SUNDAY"){
+        // Creating Date        
+        LocalDate today = LocalDate.now();
+
+        // Changing the date to the day before, or 2 days before if it's sunday
+        today = today.minusDays(1);
+        if(today.getDayOfWeek().toString() == "SUNDAY"){
             today = today.minusDays(2);
         }
-        
+                
         // Formatting date to fit into the URL
         DateTimeFormatter todayFormatter = DateTimeFormatter.ofPattern("MM-dd-yyyy"); 
         String todayString = todayFormatter.format(today);
         String url = String.format(
             "/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='%s'&$top=1&$format=json&$select=cotacaoVenda", todayString);
 
+        
         // Using the Restclient to fetch data from the Bacen API
         return restClient.get()
         .uri(url)
