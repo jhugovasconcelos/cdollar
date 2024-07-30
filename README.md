@@ -7,6 +7,7 @@ A princípio, está incluso apenas o Nubank. Futuramente serão incluídos outro
 Para fazer uma consulta simples do valor do dólar: `/price` <br>
 Para consultar apenas o valor do dólar com o spread: `/spread/{nome-do-banco}` <br>
 Para consultar o valor do dólar com spread e iof: `/rates/{nome-do-banco}`
+Vizualização no Swagger: ![Swagger](src/main/resources/static/img/routes_in_swagger.png)
 
 ## Design Patterns
 Esta API utiliza os padrões Facade (ao criar uma 'fachada' para a consulta do dólar PTAX do bacen) e
