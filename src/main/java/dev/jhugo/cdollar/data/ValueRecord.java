@@ -1,3 +1,3 @@
-package dev.jhugo.cdollar.repository;
+package dev.jhugo.cdollar.data;
 
 public record ValueRecord(double cotacaoVenda) {}

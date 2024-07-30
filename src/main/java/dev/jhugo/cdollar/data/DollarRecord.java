@@ -1,4 +1,4 @@
-package dev.jhugo.cdollar.repository;
+package dev.jhugo.cdollar.data;
 
 import java.util.List;
 

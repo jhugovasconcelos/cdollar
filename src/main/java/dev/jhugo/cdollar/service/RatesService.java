@@ -1,7 +1,9 @@
 package dev.jhugo.cdollar.service;
 
-public interface RatesService {
-    public Double getSpread();
+import org.springframework.web.client.HttpClientErrorException;
 
-    public Double getFinalRate();
+public interface RatesService {
+    public Double calculateSpread(String name) throws HttpClientErrorException;
+
+    public Double calculateFinalPrice(String name) throws HttpClientErrorException;
 }

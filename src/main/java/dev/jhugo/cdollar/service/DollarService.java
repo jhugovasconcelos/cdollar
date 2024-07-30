@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import dev.jhugo.cdollar.repository.DollarRecord;
+import dev.jhugo.cdollar.data.DollarRecord;
 
 
 
@@ -26,8 +26,8 @@ public class DollarService {
         // Creating Date        
         LocalDateTime today = LocalDateTime.now();
 
-        // Changing the date to the day before, or 2 days before if it's sunday
-        if(today.getHour() <= 14){
+        // Setting the time according to the release of the dollar price by the BCB API
+        if(today.getHour() <= 14 || today.getDayOfWeek().toString() == "SATURDAY"){
             today = today.minusDays(1);
         }
         if(today.getDayOfWeek().toString() == "SUNDAY"){
@@ -41,7 +41,7 @@ public class DollarService {
             "/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='%s'&$top=1&$format=json&$select=cotacaoVenda", todayString);
 
         
-        // Using the Restclient to fetch data from the Bacen API
+        // Using the Restclient to fetch data from the BCB API
         return restClient.get()
         .uri(url)
         .retrieve()
